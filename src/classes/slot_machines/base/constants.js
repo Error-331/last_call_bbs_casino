@@ -1,4 +1,18 @@
-const SLOT_MACHINE_UI = [
+const BASE_REEL_SYMBOL1 = [
+  '\\_     ',
+  '| \\ _  ',
+  ' \\_(_) ',
+  ' (_)   ',
+];
+
+const BASE_REEL_SYMBOL1_COLOR_MAP = [
+  [1],
+  [1, 0, 1, 0, 1],
+  [0, 1, 1, 2, 2, 2],
+  [0, 2, 2, 2],
+];
+
+const BASE_SLOT_MACHINE_UI = [
     '              ╔═══════╗',
     '              ║Jackpot║',
     ' ╔════════════╩═══════╩════════════',
@@ -42,5 +56,5 @@ _|    \_______________________/    |_
 `;*/
 
 export {
-    SLOT_MACHINE_UI
+    BASE_SLOT_MACHINE_UI,
 }

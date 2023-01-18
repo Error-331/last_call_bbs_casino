@@ -1,11 +1,13 @@
+import { isArray } from './../../utils/common_utils';
+
 class Drawable {
     #boxCharacters = [];
 
     x = 0;
     y = 0;
 
-    currentX = 0;
-    currentY = 0;
+    #currentX = 0;
+    #currentY = 0;
 
     constructor(x = 0, y = 0) {
         this.resetTo(x, y);
@@ -21,23 +23,27 @@ class Drawable {
         }
     };
 
-    drawLine(text, color) {
-        this.drawTextAt(text, color, this.currentX, this.currentY);
+    drawAtLine(text, color) {
+        this.drawTextAt(text, color, this.#currentX, this.#currentY);
     };
 
-    drawNextLine(text, color) {
-        this.drawLine(text, color);
-        this.currentY = this.currentY + 1;
+    drawAtLineNext(text, color) {
+        this.drawAtLine(text, color);
+        this.#currentY = this.#currentY + 1;
     };
 
-    drawContinueLine(text, color) {
-        this.drawLine(text, color);
-        this.currentX = this.x + text.length;
+    drawAtLineContinue(text, color) {
+        this.drawAtLine(text, color);
+        this.#currentX = this.x + text.length;
     };
 
-    drawByArray(arrayToDraw, color) {
-        for (let lineIdx = 0; lineIdx < arrayToDraw.length; lineIdx++) {
-            this.drawNextLine(arrayToDraw[lineIdx], color);
+    drawByArray(arrayToDraw = [], colorMap = []) {
+        const isColorMap = !isArray(colorMap);
+
+        for (let symbolIdx = 0; symbolIdx < arrayToDraw.length; symbolIdx++) {
+            const color = isColorMap ? colorMap[symbolIdx] : colorMap;
+
+            this.drawAtLineContinue(arrayToDraw[symbolIdx], color);
         }
     };
 
@@ -65,8 +71,8 @@ class Drawable {
         this.x = x;
         this.y = y;
 
-        this.currentX = this.x;
-        this.currentY = this.y;
+        this.#currentX = this.x;
+        this.#currentY = this.y;
     }
 
     set boxCharacters(newBoxCharacters) {
