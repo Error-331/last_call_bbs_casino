@@ -1,5 +1,3 @@
-import { isArray } from './../../utils/common_utils';
-
 class Drawable {
     #boxCharacters = [];
 
@@ -11,6 +9,23 @@ class Drawable {
 
     constructor(x = 0, y = 0) {
         this.resetTo(x, y);
+    }
+
+    advanceOneSymbolHorizontal() {
+        this.#currentX = this.#currentX + 1;
+    }
+
+    advanceToNextLine() {
+        this.#currentY = this.#currentY + 1;
+    }
+
+    lineFeed() {
+        this.#currentY = this.#currentY + 1;
+    }
+
+    carriageReturn() {
+        this.lineFeed();
+        this.#currentX = this.x;
     }
 
     drawTextAt(text, color, x, y) {
@@ -29,7 +44,7 @@ class Drawable {
 
     drawAtLineNext(text, color) {
         this.drawAtLine(text, color);
-        this.#currentY = this.#currentY + 1;
+        this.lineFeed();
     };
 
     drawAtLineContinue(text, color) {
@@ -37,12 +52,8 @@ class Drawable {
         this.#currentX = this.x + text.length;
     };
 
-    drawByArray(arrayToDraw = [], colorMap = []) {
-        const isColorMap = !isArray(colorMap);
-
+    drawByArray(arrayToDraw = [], color) {
         for (let symbolIdx = 0; symbolIdx < arrayToDraw.length; symbolIdx++) {
-            const color = isColorMap ? colorMap[symbolIdx] : colorMap;
-
             this.drawAtLineContinue(arrayToDraw[symbolIdx], color);
         }
     };
@@ -75,12 +86,32 @@ class Drawable {
         this.#currentY = this.y;
     }
 
-    set boxCharacters(newBoxCharacters) {
-        this.#boxCharacters = newBoxCharacters;
+    reset() {
+        this.resetTo(this.x, this.y);
     }
 
     get boxCharacters() {
         return this.#boxCharacters;
+    }
+
+    get currentX() {
+        return this.#currentX;
+    }
+
+    get currentY() {
+        return this.#currentY;
+    }
+
+    set boxCharacters(newBoxCharacters) {
+        this.#boxCharacters = newBoxCharacters;
+    }
+
+    set currentX(currentX) {
+        this.#currentX = currentX;
+    }
+
+    set currentY(currentY) {
+        this.#currentY = currentY;
     }
 }
 

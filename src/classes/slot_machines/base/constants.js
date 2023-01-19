@@ -1,15 +1,15 @@
 const BASE_REEL_SYMBOL1 = [
-  '\\_     ',
-  '| \\ _  ',
-  ' \\_(_) ',
-  ' (_)   ',
+  '\\▄     ',
+  '▐ \\ ▄  ',
+  ' \\▄(▄) ',
+  ' (▄)   ',
 ];
 
 const BASE_REEL_SYMBOL1_COLOR_MAP = [
-  [1],
+  [1, 1],
   [1, 0, 1, 0, 1],
-  [0, 1, 1, 2, 2, 2],
-  [0, 2, 2, 2],
+  [0, 1, 1, 10, 10, 10],
+  [0, 10, 10, 10],
 ];
 
 const BASE_SLOT_MACHINE_UI = [
@@ -56,5 +56,7 @@ _|    \_______________________/    |_
 `;*/
 
 export {
+    BASE_REEL_SYMBOL1,
+    BASE_REEL_SYMBOL1_COLOR_MAP,
     BASE_SLOT_MACHINE_UI,
 }

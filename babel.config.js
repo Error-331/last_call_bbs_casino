@@ -3,7 +3,7 @@ const presets = [
         '@babel/env',
         {
             targets: {
-                'ie': '6',
+                'ie': '8',
             },
             useBuiltIns: 'entry',
             corejs: '3.22',
@@ -17,4 +17,11 @@ const plugins = [
     '@babel/plugin-proposal-class-properties'
 ];
 
-module.exports = { presets, plugins };
+module.exports = {
+    "assumptions": {
+        "privateFieldsAsProperties": true
+    },
+
+    presets,
+    plugins
+};

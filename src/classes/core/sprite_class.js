@@ -38,10 +38,10 @@ class Sprite extends Drawable {
         this.advanceOneSymbolHorizontal();
       }
 
-      this.advanceToNextLine();
+      this.carriageReturn();
     }
 
-    this.reset()
+    this.reset();
   }
 
   set spriteData(spriteData) {

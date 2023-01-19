@@ -1,9 +1,19 @@
 import 'core-js/es/weak-map';
 
 import AnimationFrame from './classes/core/animation_frame_class';
+import Sprite from './classes/core/sprite_class';
+import {BASE_REEL_SYMBOL1, BASE_REEL_SYMBOL1_COLOR_MAP} from "./classes/slot_machines/base/constants";
 
-const a1 = new AnimationFrame({speed: 444})
-let x1 = 11;
+//const a1 = new AnimationFrame({speed: 444})
+//let x1 = 11;
+
+const c1 = new Sprite({
+    x: 5,
+    y: 5,
+
+    spriteData: BASE_REEL_SYMBOL1,
+    colorMap: BASE_REEL_SYMBOL1_COLOR_MAP,
+});
 
 function getName() {
     return 'Casino';
@@ -20,7 +30,7 @@ function onUpdate()
 {
     clearScreen();
 
-    function d1() {
+   /* function d1() {
         drawText(x1, 17, x1, 9);
     }
 
@@ -32,9 +42,10 @@ function onUpdate()
     }
 
 
-    a1.draw(d1, d2);
+    a1.draw(d1, d2);*/
+    c1.draw();
 }
-
+// colors 1-17
 function onInput(key)
 {
 
