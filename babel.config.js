@@ -18,8 +18,8 @@ const plugins = [
 ];
 
 module.exports = {
-    "assumptions": {
-        "privateFieldsAsProperties": true
+    'assumptions': {
+        'privateFieldsAsProperties': true,
     },
 
     presets,

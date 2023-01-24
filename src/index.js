@@ -1,18 +1,67 @@
+import 'core-js/es/array';
 import 'core-js/es/weak-map';
 
 import AnimationFrame from './classes/core/animation_frame_class';
-import Sprite from './classes/core/sprite_class';
-import {BASE_REEL_SYMBOL1, BASE_REEL_SYMBOL1_COLOR_MAP} from "./classes/slot_machines/base/constants";
 
-//const a1 = new AnimationFrame({speed: 444})
+import {
+    BASE_REEL_SYMBOL1,
+    BASE_REEL_SYMBOL2,
+    BASE_REEL_SYMBOL3,
+
+    BASE_REEL_SYMBOL1_COLOR_MAP,
+    BASE_REEL_SYMBOL2_COLOR_MAP,
+    BASE_REEL_SYMBOL3_COLOR_MAP,
+} from './classes/slot_machines/base/constants';
+import Sprite from "./classes/core/sprite_class";
+
+const a1 = new AnimationFrame({speed: 1})
 //let x1 = 11;
-
-const c1 = new Sprite({
+let c1 = new Sprite({
     x: 5,
-    y: 5,
+    y: 0,
 
     spriteData: BASE_REEL_SYMBOL1,
     colorMap: BASE_REEL_SYMBOL1_COLOR_MAP,
+});
+
+let c2 = new Sprite({
+    x: 5,
+    y: 4,
+
+    spriteData: BASE_REEL_SYMBOL2,
+    colorMap: BASE_REEL_SYMBOL2_COLOR_MAP,
+});
+
+let c3 = new Sprite({
+    x: 5,
+    y: 8,
+
+    spriteData: BASE_REEL_SYMBOL3,
+    colorMap: BASE_REEL_SYMBOL3_COLOR_MAP,
+});
+
+let c4 = new Sprite({
+    x: 15,
+    y: 0,
+
+    spriteData: BASE_REEL_SYMBOL1,
+    colorMap: BASE_REEL_SYMBOL1_COLOR_MAP,
+});
+
+let c5 = new Sprite({
+    x: 15,
+    y: 4,
+
+    spriteData: BASE_REEL_SYMBOL2,
+    colorMap: BASE_REEL_SYMBOL2_COLOR_MAP,
+});
+
+let c6 = new Sprite({
+    x: 15,
+    y: 8,
+
+    spriteData: BASE_REEL_SYMBOL3,
+    colorMap: BASE_REEL_SYMBOL3_COLOR_MAP,
 });
 
 function getName() {
@@ -26,24 +75,40 @@ function onConnect()
     let keyBuffer = loadData();
 }
 
+let a = true;
+let b = 1;
+
+function d1() {
+    drawText(b, 17, 0, 0);
+}
+
+function d2() {
+    a = true;
+
+}
+
 function onUpdate()
 {
-    clearScreen();
+    //clearScreen();
 
-   /* function d1() {
-        drawText(x1, 17, x1, 9);
+
+    //a1.draw(d1, d2);
+
+    if (a === true) {
+        b+=1;
+        clearScreen();
+
+        c1.draw();
+        c2.draw();
+        c3.draw();
+
+        c4.draw();
+        c5.draw();
+        c6.draw();
+
+        a = false;
     }
 
-    function d2() {
-        if (x1 < 54) {
-            x1 = x1 + 1;
-        }
-
-    }
-
-
-    a1.draw(d1, d2);*/
-    c1.draw();
 }
 // colors 1-17
 function onInput(key)

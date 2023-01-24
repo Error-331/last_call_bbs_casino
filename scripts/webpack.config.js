@@ -5,7 +5,7 @@ module.exports = {
     watch: true,
     context: path.resolve(__dirname, './../'),
 
-    target: ['web', 'es5'],
+    target: ['web', 'es3'],
     entry: './src/index.js',
 
     watchOptions: {
