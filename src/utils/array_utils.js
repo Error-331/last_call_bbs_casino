@@ -6,8 +6,14 @@ function findLongestArray(parentArray = []) {
   }
 
   return maxLength;
-};
+}
+
+// TODO: checks
+function createFill(length, padding) {
+  return new Array(length).fill(padding);
+}
 
 export {
-  findLongestArray
+  createFill,
+  findLongestArray,
 }
