@@ -1,8 +1,10 @@
+import { createContinuousString } from './../../utils/string_utils';
+
 class Drawable {
     #boxCharacters = [];
 
-    x = 0;
-    y = 0;
+    #x = 0;
+    #y = 0;
 
     #currentX = 0;
     #currentY = 0;
@@ -25,7 +27,7 @@ class Drawable {
 
     carriageReturn() {
         this.lineFeed();
-        this.#currentX = this.x;
+        this.#currentX = this.#x;
     }
 
     drawTextAt(text, color, x, y) {
@@ -49,7 +51,7 @@ class Drawable {
 
     drawAtLineContinue(text, color) {
         this.drawAtLine(text, color);
-        this.#currentX = this.x + text.length;
+        this.#currentX = this.#x + text.length;
     };
 
     drawByArray(arrayToDraw = [], color) {
@@ -63,35 +65,47 @@ class Drawable {
     }
 
     drawBox(color, x, y, width, height) {
-        drawText(this.boxCharacters[0], color, x, y);
-        this.drawTextAt(createContinuousString(this.boxCharacters[1], width - 2), color, x + 1, y);
-        drawText(this.boxCharacters[2], color, x + (width - 1), y);
+        drawText(this.#boxCharacters[0], color, x, y);
+        this.drawTextAt(createContinuousString(this.#boxCharacters[1], width - 2), color, x + 1, y);
+        drawText(this.#boxCharacters[2], color, x + (width - 1), y);
 
-        drawText(this.boxCharacters[6], color, x, y + (height - 1));
-        this.drawTextAt(createContinuousString(this.boxCharacters[1], width - 2), color, x + 1,  y + (height - 1));
-        drawText(this.boxCharacters[4], color, x + (width - 1), y + (height - 1));
+        drawText(this.#boxCharacters[6], color, x, y + (height - 1));
+        this.drawTextAt(createContinuousString(this.#boxCharacters[1], width - 2), color, x + 1,  y + (height - 1));
+        drawText(this.#boxCharacters[4], color, x + (width - 1), y + (height - 1));
 
         // right vertical line
-        this.drawVerticalLineAt(this.boxCharacters[3], color, x + (width - 1), y + 1, height - 2);
+        this.drawVerticalLineAt(this.#boxCharacters[3], color, x + (width - 1), y + 1, height - 2);
 
         // left vertical line
-        this.drawVerticalLineAt(this.boxCharacters[7], color, x, y + 1, height - 2);
-    }
-
-    resetTo(x, y) {
-        this.x = x;
-        this.y = y;
-
-        this.#currentX = this.x;
-        this.#currentY = this.y;
+        this.drawVerticalLineAt(this.#boxCharacters[7], color, x, y + 1, height - 2);
     }
 
     reset() {
-        this.resetTo(this.x, this.y);
+        this.resetTo(this.#x, this.#y);
+    }
+
+    resetTo(x, y) {
+        this.#x = x;
+        this.#y = y;
+
+        this.#currentX = this.#x;
+        this.#currentY = this.#y;
+    }
+
+    set boxCharacters(newBoxCharacters) {
+        this.#boxCharacters = newBoxCharacters;
     }
 
     get boxCharacters() {
         return this.#boxCharacters;
+    }
+
+    get x() {
+        return this.#x;
+    }
+
+    get y() {
+        return this.#y;
     }
 
     get currentX() {
@@ -102,17 +116,6 @@ class Drawable {
         return this.#currentY;
     }
 
-    set boxCharacters(newBoxCharacters) {
-        this.#boxCharacters = newBoxCharacters;
-    }
-
-    set currentX(currentX) {
-        this.#currentX = currentX;
-    }
-
-    set currentY(currentY) {
-        this.#currentY = currentY;
-    }
 }
 
 export default Drawable;

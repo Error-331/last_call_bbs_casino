@@ -26,29 +26,36 @@ class Sprite extends Drawable {
   }
 
   draw() {
+    const spriteData = this.#spriteData;
+    const colorData = this.#colorMap;
+
+    const x = this.x;
+
+    let currentX = this.currentX;
+    let currentY = this.currentY;
+
     for (let rowIdx = 0; rowIdx < this.#spriteData.length; rowIdx++) {
-      const spriteRowData = this.#spriteData[rowIdx];
-      const colorRowData = this.#colorMap[rowIdx];
+      const spriteRowData = spriteData[rowIdx];
+      const colorRowData = colorData[rowIdx];
 
       for (let symbolIdx = 0; symbolIdx < spriteRowData.length; symbolIdx++) {
         const symbol = spriteRowData[symbolIdx];
         const color = isNullOrEmpty(colorRowData[symbolIdx]) ? 0 : colorRowData[symbolIdx];
 
-        this.drawAtLine(symbol, color);
-        this.advanceOneSymbolHorizontal();
+        drawText(symbol, color, currentX, currentY);
+        currentX += 1;
       }
 
-      this.carriageReturn();
+      currentX = x;
+      currentY += 1;
     }
-
-    this.reset();
   }
 
   set spriteData(spriteData) {
-      this.#spriteData = spriteData;
+    this.#spriteData = spriteData;
 
-      this.#width = findLongestArray(spriteData);
-      this.#height = spriteData.length;
+    this.#width = findLongestArray(spriteData);
+    this.#height = spriteData.length;
   }
 }
 
