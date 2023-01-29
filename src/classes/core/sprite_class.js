@@ -7,6 +7,8 @@ class Sprite extends Drawable {
   #spriteData = [];
   #colorMap = [];
 
+  #drawInstructions = [];
+
   #width = 0;
   #height = 0;
 
@@ -23,9 +25,11 @@ class Sprite extends Drawable {
 
     this.spriteData = spriteData;
     this.#colorMap = colorMap;
+
+    this.prepareDrawInstructions();
   }
 
-  draw() {
+  prepareDrawInstructions() {
     const spriteData = this.#spriteData;
     const colorData = this.#colorMap;
 
@@ -38,17 +42,44 @@ class Sprite extends Drawable {
       const spriteRowData = spriteData[rowIdx];
       const colorRowData = colorData[rowIdx];
 
-      for (let symbolIdx = 0; symbolIdx < spriteRowData.length; symbolIdx++) {
-        const symbol = spriteRowData[symbolIdx];
-        const color = isNullOrEmpty(colorRowData[symbolIdx]) ? 0 : colorRowData[symbolIdx];
+      let colorBuffer = isNullOrEmpty(colorRowData[0]) ? 0 : colorRowData[0];
 
-        drawText(symbol, color, currentX, currentY);
-        currentX += 1;
+      let strPos = 0;
+      let symbolIdx = 0;
+
+      for (symbolIdx = 0; symbolIdx < spriteRowData.length; symbolIdx++) {
+        const currentColor = isNullOrEmpty(colorRowData[symbolIdx]) ? 0 : colorRowData[symbolIdx];
+
+        if (currentColor !== colorBuffer) {
+          const strToDraw = spriteRowData.slice(strPos, symbolIdx);
+          this.#drawInstructions.push([strToDraw, colorBuffer, currentX, currentY]);
+
+          currentX += strToDraw.length;
+          strPos = symbolIdx;
+
+          colorBuffer = currentColor;
+        }
       }
+
+      this.#drawInstructions.push([spriteRowData.slice(strPos, symbolIdx), colorBuffer, currentX, currentY]);
 
       currentX = x;
       currentY += 1;
     }
+  }
+
+  draw() {
+    for (const drawInstructionRow of this.#drawInstructions) {
+      drawText(drawInstructionRow[0], drawInstructionRow[1], drawInstructionRow[2], drawInstructionRow[3]);
+    }
+  }
+
+  get spriteData() {
+    return this.#spriteData;
+  }
+
+  get colorMap() {
+    return this.#colorMap;
   }
 
   set spriteData(spriteData) {
@@ -56,6 +87,10 @@ class Sprite extends Drawable {
 
     this.#width = findLongestArray(spriteData);
     this.#height = spriteData.length;
+  }
+
+  set colorMap(colorMap) {
+    this.#colorMap = colorMap;
   }
 }
 

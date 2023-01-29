@@ -13,6 +13,7 @@ import {
     BASE_REEL_SYMBOL3_COLOR_MAP,
 } from './classes/slot_machines/base/constants';
 import Sprite from "./classes/core/sprite_class";
+import {isNullOrEmpty} from "./utils/common_utils";
 
 const a1 = new AnimationFrame({speed: 1})
 //let x1 = 11;
@@ -87,27 +88,19 @@ function d2() {
 
 }
 
+
 function onUpdate()
 {
-    //clearScreen();
+    clearScreen();
 
 
-    //a1.draw(d1, d2);
+    c1.draw();
+    c2.draw();
+    c3.draw();
 
-    if (a === true) {
-        b+=1;
-        clearScreen();
-
-        c1.draw();
-        c2.draw();
-        c3.draw();
-
-        c4.draw();
-        c5.draw();
-        c6.draw();
-
-        a = false;
-    }
+    c4.draw();
+    c5.draw();
+    c6.draw();
 
 }
 // colors 1-17
