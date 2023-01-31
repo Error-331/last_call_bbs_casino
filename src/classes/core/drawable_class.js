@@ -80,6 +80,10 @@ class Drawable {
         this.drawVerticalLineAt(this.#boxCharacters[7], color, x, y + 1, height - 2);
     }
 
+    draw() {
+        return true;
+    }
+
     reset() {
         this.resetTo(this.#x, this.#y);
     }

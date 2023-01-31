@@ -82,6 +82,10 @@ class Sprite extends Drawable {
     return this.#colorMap;
   }
 
+  get drawInstructions() {
+    return this.#drawInstructions;
+  }
+
   set spriteData(spriteData) {
     this.#spriteData = spriteData;
 
