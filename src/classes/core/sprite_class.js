@@ -23,10 +23,15 @@ class Sprite extends Drawable {
 
     super(x, y);
 
-    this.spriteData = spriteData;
+    this.#spriteData = spriteData;
     this.#colorMap = colorMap;
 
     this.prepareDrawInstructions();
+  }
+
+  updateDimensions() {
+    this.#width = findLongestArray(this.#spriteData);
+    this.#height = this.#spriteData.length;
   }
 
   prepareDrawInstructions() {
@@ -89,12 +94,13 @@ class Sprite extends Drawable {
   set spriteData(spriteData) {
     this.#spriteData = spriteData;
 
-    this.#width = findLongestArray(spriteData);
-    this.#height = spriteData.length;
+    this.updateDimensions();
+    this.prepareDrawInstructions();
   }
 
   set colorMap(colorMap) {
     this.#colorMap = colorMap;
+    this.prepareDrawInstructions();
   }
 }
 

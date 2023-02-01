@@ -7,7 +7,6 @@ const DRAWABLE_TYPE = 'DRAWABLE_TYPE';
 class Drawer {
     static #instance;
 
-    #shouldRedraw = true;
     #buffer = [];
 
     #extractDrawableClassType(drawableObj) {
@@ -23,10 +22,11 @@ class Drawer {
             throw new Error('Drawable is null of empty, cannot add drawable to buffer');
         }
 
-        return this.#buffer.push({
-            type: this. #extractDrawableClassType(drawable),
+        this.#buffer.push({
+            type: this.#extractDrawableClassType(drawable),
             instance: drawable,
-        }) - 1;
+            drawInstructions: null,
+        });
     }
 
     addDrawableBunch(drawables) {
@@ -37,23 +37,18 @@ class Drawer {
         for (const drawableObj of drawables) {
             this.#addDrawableToBuffer(drawableObj);
         }
-
-        this.#shouldRedraw = true;
     }
 
     addDrawable(drawable) {
         this.#addDrawableToBuffer(drawable);
-        this.#shouldRedraw = true;
     }
 
     draw() {
-        if (!this.#shouldRedraw) {
-            return;
-        }
-
         for (const drawable of this.#buffer) {
-            drawable.draw();
-            this.#shouldRedraw = false;
+            if (drawable.drawInstructions !== drawable.instance.drawInstructions) {
+                drawable.drawInstructions = drawable.instance.drawInstructions;
+                drawable.instance.draw();
+            }
         }
     }
 

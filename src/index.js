@@ -2,6 +2,7 @@ import 'core-js/es/array';
 import 'core-js/es/weak-map';
 
 import AnimationFrame from './classes/core/animation_frame_class';
+import Drawer from './classes/core/drawer_class';
 
 import {
     BASE_REEL_SYMBOL1,
@@ -65,6 +66,9 @@ let c6 = new Sprite({
     colorMap: BASE_REEL_SYMBOL3_COLOR_MAP,
 });
 
+const drawerInstance = new Drawer();
+drawerInstance.addDrawableBunch([c1,c2,c3,c4,c5,c6])
+
 function getName() {
     return 'Casino';
 }
@@ -76,32 +80,10 @@ function onConnect()
     let keyBuffer = loadData();
 }
 
-let a = true;
-let b = 1;
-
-function d1() {
-    drawText(b, 17, 0, 0);
-}
-
-function d2() {
-    a = true;
-
-}
-
 
 function onUpdate()
 {
-    clearScreen();
-
-
-    c1.draw();
-    c2.draw();
-    c3.draw();
-
-    c4.draw();
-    c5.draw();
-    c6.draw();
-
+    drawerInstance.draw();
 }
 // colors 1-17
 function onInput(key)
