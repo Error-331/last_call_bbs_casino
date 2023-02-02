@@ -4,104 +4,134 @@ import { findLongestArray } from './../../utils/array_utils';
 import { isNullOrEmpty } from './../../utils/common_utils';
 
 class Sprite extends Drawable {
-  #spriteData = [];
-  #colorMap = [];
+    #spriteData = [];
+    #colorMap = [];
 
-  #drawInstructions = [];
+    #drawInstructions = [];
 
-  #width = 0;
-  #height = 0;
+    #width = 0;
+    #height = 0;
 
-  constructor(options) {
-    const {
-      x = 0,
-      y = 0,
+    #effects = [];
 
-      spriteData = [],
-      colorMap = [],
-    } = options;
+    constructor(options) {
+        const {
+            x = 0,
+            y = 0,
 
-    super(x, y);
+            spriteData = [],
+            colorMap = [],
 
-    this.#spriteData = spriteData;
-    this.#colorMap = colorMap;
+            effects = [],
+        } = options;
 
-    this.prepareDrawInstructions();
-  }
+        super(x, y);
 
-  updateDimensions() {
-    this.#width = findLongestArray(this.#spriteData);
-    this.#height = this.#spriteData.length;
-  }
+        this.#spriteData = spriteData;
+        this.#colorMap = colorMap;
 
-  prepareDrawInstructions() {
-    const spriteData = this.#spriteData;
-    const colorData = this.#colorMap;
+        this.#effects = effects;
 
-    const x = this.x;
+        this.prepareDrawInstructions();
+    }
 
-    let currentX = this.currentX;
-    let currentY = this.currentY;
+    #applyEffects(drawInstructions) {
+        let preparedDrawInstructions = drawInstructions;
 
-    for (let rowIdx = 0; rowIdx < this.#spriteData.length; rowIdx++) {
-      const spriteRowData = spriteData[rowIdx];
-      const colorRowData = colorData[rowIdx];
-
-      let colorBuffer = isNullOrEmpty(colorRowData[0]) ? 0 : colorRowData[0];
-
-      let strPos = 0;
-      let symbolIdx = 0;
-
-      for (symbolIdx = 0; symbolIdx < spriteRowData.length; symbolIdx++) {
-        const currentColor = isNullOrEmpty(colorRowData[symbolIdx]) ? 0 : colorRowData[symbolIdx];
-
-        if (currentColor !== colorBuffer) {
-          const strToDraw = spriteRowData.slice(strPos, symbolIdx);
-          this.#drawInstructions.push([strToDraw, colorBuffer, currentX, currentY]);
-
-          currentX += strToDraw.length;
-          strPos = symbolIdx;
-
-          colorBuffer = currentColor;
+        for (const effect of this.#effects) {
+            preparedDrawInstructions = effect.apply(this, preparedDrawInstructions)
         }
-      }
 
-      this.#drawInstructions.push([spriteRowData.slice(strPos, symbolIdx), colorBuffer, currentX, currentY]);
-
-      currentX = x;
-      currentY += 1;
+        return preparedDrawInstructions;
     }
-  }
 
-  draw() {
-    for (const drawInstructionRow of this.#drawInstructions) {
-      drawText(drawInstructionRow[0], drawInstructionRow[1], drawInstructionRow[2], drawInstructionRow[3]);
+    updateDimensions() {
+        this.#width = findLongestArray(this.#spriteData);
+        this.#height = this.#spriteData.length;
     }
-  }
 
-  get spriteData() {
-    return this.#spriteData;
-  }
+    prepareDrawInstructions() {
+        const spriteData = this.#spriteData;
+        const colorData = this.#colorMap;
 
-  get colorMap() {
-    return this.#colorMap;
-  }
+        const x = this.x;
 
-  get drawInstructions() {
-    return this.#drawInstructions;
-  }
+        let currentX = this.currentX;
+        let currentY = this.currentY;
 
-  set spriteData(spriteData) {
-    this.#spriteData = spriteData;
+        this.#drawInstructions = [];
 
-    this.updateDimensions();
-    this.prepareDrawInstructions();
-  }
+        for (let rowIdx = 0; rowIdx < this.#spriteData.length; rowIdx++) {
+            const drawInstructions = this.#applyEffects([spriteData[rowIdx], colorData[rowIdx], currentX, currentY])
 
-  set colorMap(colorMap) {
-    this.#colorMap = colorMap;
-    this.prepareDrawInstructions();
-  }
+            if (isNullOrEmpty(drawInstructions)) {
+                currentX = x;
+                currentY += 1;
+
+                continue;
+            }
+
+            const spriteRowData = drawInstructions[0];
+            const colorRowData = drawInstructions[1];
+
+            currentX = drawInstructions[2];
+            currentY = drawInstructions[3];
+
+            let colorBuffer = isNullOrEmpty(colorRowData[0]) ? 0 : colorRowData[0];
+
+            let strPos = 0;
+            let symbolIdx = 0;
+
+            for (symbolIdx = 0; symbolIdx < spriteRowData.length; symbolIdx++) {
+                const currentColor = isNullOrEmpty(colorRowData[symbolIdx]) ? 0 : colorRowData[symbolIdx];
+
+                if (currentColor !== colorBuffer) {
+                    const strToDraw = spriteRowData.slice(strPos, symbolIdx);
+                    this.#drawInstructions.push([strToDraw, colorBuffer, currentX, currentY]);
+
+                    currentX += strToDraw.length;
+                    strPos = symbolIdx;
+
+                    colorBuffer = currentColor;
+                }
+            }
+
+            this.#drawInstructions.push([spriteRowData.slice(strPos, symbolIdx), colorBuffer, currentX, currentY]);
+
+            currentX = x;
+            currentY += 1;
+        }
+    }
+
+    draw() {
+        for (const drawInstructionRow of this.#drawInstructions) {
+            drawText(drawInstructionRow[0], drawInstructionRow[1], drawInstructionRow[2], drawInstructionRow[3]);
+        }
+    }
+
+    get spriteData() {
+        return this.#spriteData;
+    }
+
+    get colorMap() {
+        return this.#colorMap;
+    }
+
+    get drawInstructions() {
+        return this.#drawInstructions;
+    }
+
+    set spriteData(spriteData) {
+        this.#spriteData = spriteData;
+
+        this.updateDimensions();
+        this.prepareDrawInstructions();
+    }
+
+    set colorMap(colorMap) {
+        this.#colorMap = colorMap;
+        this.prepareDrawInstructions();
+    }
 }
 
 export default Sprite;
