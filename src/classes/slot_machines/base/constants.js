@@ -14,12 +14,17 @@ const BASE_REEL_SYMBOL2 = [
     '▙▄▄▄▄▄▄▄▟',
 ];
 
-//const b = ['█','▟','▙','▜','▛','▀','▄','▐','▌','▝','▘','▗','▖'];
 const BASE_REEL_SYMBOL3 = [
     '   ▄▄▄   ',
     '  ▌▄  ▐  ',
     '   / /   ',
     '  /▄/    '
+];
+
+const BASE_REEL1 = [
+    ...BASE_REEL_SYMBOL1,
+    ...BASE_REEL_SYMBOL2,
+    ...BASE_REEL_SYMBOL3,
 ];
 
 const BASE_REEL_SYMBOL1_COLOR_MAP = [
@@ -41,6 +46,12 @@ const BASE_REEL_SYMBOL3_COLOR_MAP = [
     createFill(9, 10),
     createFill(9, 10),
     createFill(9, 10),
+];
+
+const BASE_REEL1_COLOR_MAP = [
+    ...BASE_REEL_SYMBOL1_COLOR_MAP,
+    ...BASE_REEL_SYMBOL2_COLOR_MAP,
+    ...BASE_REEL_SYMBOL3_COLOR_MAP,
 ];
 
 const BASE_SLOT_MACHINE_UI = [
@@ -91,9 +102,13 @@ export {
     BASE_REEL_SYMBOL2,
     BASE_REEL_SYMBOL3,
 
+    BASE_REEL1,
+
     BASE_REEL_SYMBOL1_COLOR_MAP,
     BASE_REEL_SYMBOL2_COLOR_MAP,
     BASE_REEL_SYMBOL3_COLOR_MAP,
+
+    BASE_REEL1_COLOR_MAP,
 
     BASE_SLOT_MACHINE_UI,
 }
