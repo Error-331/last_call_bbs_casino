@@ -14,14 +14,14 @@ const presets = [
 const plugins = [
     'babel-plugin-dev-expression',
     '@babel/plugin-proposal-export-default-from',
-    '@babel/plugin-proposal-class-properties'
+    '@babel/plugin-proposal-class-properties',
 ];
 
 module.exports = {
+    presets,
+    plugins,
+
     'assumptions': {
         'privateFieldsAsProperties': true,
     },
-
-    presets,
-    plugins
 };
