@@ -1,5 +1,7 @@
 import Drawable from './drawable_class';
 
+import { PRE_SPRITE_EFFECT, POST_SPRITE_EFFECT } from './../../constants/sprite_effect_constants';
+
 import { findLongestArray } from './../../utils/array_utils';
 import { isNullOrEmpty } from './../../utils/common_utils';
 
@@ -35,14 +37,22 @@ class Sprite extends Drawable {
         this.prepareDrawInstructions();
     }
 
-    #applyEffects(drawInstructions) {
-        let preparedDrawInstructions = drawInstructions;
+    #applyEffects(effectType, effectsArray, drawInstruction) {
+        let preparedDrawInstruction = drawInstruction;
 
-        for (const effect of this.#effects) {
-            preparedDrawInstructions = effect.apply(this, preparedDrawInstructions)
+        for (const effect of effectsArray) {
+            if (effect.effectType !== effectType) {
+                continue;
+            }
+
+            preparedDrawInstruction = effect.apply(this, preparedDrawInstruction)
         }
 
-        return preparedDrawInstructions;
+        return preparedDrawInstruction;
+    }
+
+    #applyPreEffects(drawInstruction) {
+        return this.#applyEffects(PRE_SPRITE_EFFECT, this.#effects, drawInstruction);
     }
 
     updateDimensions() {
@@ -62,7 +72,7 @@ class Sprite extends Drawable {
         this.#drawInstructions = [];
 
         for (let rowIdx = 0; rowIdx < this.#spriteData.length; rowIdx++) {
-            const drawInstructions = this.#applyEffects([spriteData[rowIdx], colorData[rowIdx], currentX, currentY])
+            const drawInstructions = this.#applyPreEffects([spriteData[rowIdx], colorData[rowIdx], currentX, currentY])
 
             if (isNullOrEmpty(drawInstructions)) {
                 currentX = x;
@@ -87,7 +97,7 @@ class Sprite extends Drawable {
 
                 if (currentColor !== colorBuffer) {
                     const strToDraw = spriteRowData.slice(strPos, symbolIdx);
-                    this.#drawInstructions.push([strToDraw, colorBuffer, currentX, currentY]);
+                    this.#drawInstructions.push([strToDraw, colorBuffer, currentX, currentY, strToDraw.length]);
 
                     currentX += strToDraw.length;
                     strPos = symbolIdx;
