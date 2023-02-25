@@ -1,9 +1,13 @@
+import { isString } from './../../utils/common_utils';
+
 class SpriteEffectClass {
     #x1 = null;
     #x2 = null;
 
     #y1 = null;
     #y2 = null;
+
+    #effectType = null;
 
     isDrawInstructionInYBounds(drawable, drawInstruction) {
         const [
@@ -25,7 +29,7 @@ class SpriteEffectClass {
             x2 = 0,
 
             y1 = 0,
-            y2 = 0
+            y2 = 0,
         } = options;
 
         this.#x1 = x1;
@@ -49,6 +53,18 @@ class SpriteEffectClass {
 
     get y2() {
         return this.#y2;
+    }
+
+    get effectType() {
+        return this.#effectType;
+    }
+
+    set effectType(effectType) {
+        if (!isString(effectType)) {
+            throw new Error('Effect type must be of type string');
+        }
+
+        this.#effectType = effectType;
     }
 
     setEffectArea(x1, x2, y1, y2) {
