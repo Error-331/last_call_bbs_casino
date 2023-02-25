@@ -1,7 +1,9 @@
 import SpriteEffectClass from '../../core/sprite_effect_class';
+
+import { PRE_SPRITE_EFFECT } from './../../../constants/sprite_effect_constants';
 import { isNullOrEmpty } from './../../../utils/common_utils';
 
-class SpriteCropPreEffect extends SpriteEffectClass{
+class SpriteCropPreEffect extends SpriteEffectClass {
     apply(drawable, drawInstruction) {
         if (isNullOrEmpty(drawInstruction)) {
             return null;
@@ -22,6 +24,11 @@ class SpriteCropPreEffect extends SpriteEffectClass{
         } else {
             return null;
         }
+    }
+
+    constructor(options) {
+        super(options);
+        this.effectType = PRE_SPRITE_EFFECT;
     }
 }
 
