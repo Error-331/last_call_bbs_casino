@@ -10,12 +10,10 @@ class SpriteEffectClass {
     #effectType = null;
 
     isDrawInstructionInYBounds(drawable, drawInstruction) {
-        const rowY = this.extractDrawInstructionRowY(drawInstruction);
-
         const y1 = drawable.y + this.y1;
         const y2 = drawable.y + this.y2;
 
-        return rowY >= y1 && rowY <= y2;
+        return drawInstruction.y >= y1 && drawInstruction.y <= y2;
     }
 
     apply(drawable, drawInstruction) {
@@ -40,22 +38,6 @@ class SpriteEffectClass {
 
         this.#y1 = y1;
         this.#y2 = y2;
-    }
-
-    extractDrawInstructionRowX(drawInstruction) {
-        return drawInstruction[2];
-    }
-
-    extractDrawInstructionRowY(drawInstruction) {
-        return drawInstruction[3];
-    }
-
-    setDrawInstructionRowX(drawInstruction, rowX) {
-        drawInstruction[2] = rowX;
-    }
-
-    setDrawInstructionRowY(drawInstruction, rowY) {
-        drawInstruction[3] = rowY;
     }
 
     get x1() {

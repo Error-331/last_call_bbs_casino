@@ -9,18 +9,13 @@ class SpriteCropPreEffect extends SpriteEffectClass {
             return null;
         }
 
-        const [
-            spriteRowData,
-            colorBuffer,
-            rowX,
-            rowY,
-        ] = drawInstruction;
-
         if (this.isDrawInstructionInYBounds(drawable, drawInstruction)) {
-            const newSpriteRowData = spriteRowData.substring(this.x1, this.x2);
-            const newColorBuffer = colorBuffer.slice(this.x1, this.x2);
+            drawInstruction.data = drawInstruction.data.substring(this.x1, this.x2);
+            drawInstruction.colorBuffer = drawInstruction.colorBuffer.slice(this.x1, this.x2);
 
-            return [newSpriteRowData, newColorBuffer, rowX + this.x1, rowY];
+            drawInstruction.x = drawInstruction.x + this.x1;
+
+            return drawInstruction;
         } else {
             return null;
         }
