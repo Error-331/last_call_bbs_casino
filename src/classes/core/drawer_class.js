@@ -8,6 +8,7 @@ class Drawer {
     static #instance;
 
     #buffer = [];
+    #t = 0;
 
     #extractDrawableClassType(drawableObj) {
         if (drawableObj instanceof Sprite) {
@@ -48,6 +49,9 @@ class Drawer {
             if (drawable.drawInstructions !== drawable.instance.drawInstructions) {
                 drawable.drawInstructions = drawable.instance.drawInstructions;
                 drawable.instance.draw();
+
+                drawText(this.#t, 10, 0, 0);
+                this.#t += 1;
             }
         }
     }
