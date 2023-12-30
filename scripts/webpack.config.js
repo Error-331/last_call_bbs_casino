@@ -38,7 +38,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(js)?$/,
-                use: [{loader: 'babel-loader', options: {compact: false}}],
+                use: [{ loader: 'babel-loader', options: { compact: false } }],
             },
         ],
     },
