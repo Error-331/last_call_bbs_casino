@@ -17,7 +17,7 @@ import {
 
     BASE_REEL1_COLOR_MAP,
 } from './classes/slot_machines/base/constants';
-import Sprite from "./classes/core/sprite_class";
+import Sprite from "./classes/drawable/sprite_class";
 import SpriteCropPreEffect from './classes/effects/pre/sprite_crop_pre_effect_class';
 
 

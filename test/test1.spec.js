@@ -2,7 +2,7 @@ import {
     bindGlobalAxiomFunctionsNodeJS,
     unbindGlobalAxiomFunctionsNodeJS
 } from './../src/utils/test_utils';
-import Sprite from "../src/classes/core/sprite_class";
+import Sprite from "../src/classes/drawable/sprite_class";
 import {BASE_REEL1, BASE_REEL1_COLOR_MAP} from "../src/classes/slot_machines/base/constants";
 import SpriteCropPreEffect from "../src/classes/effects/pre/sprite_crop_pre_effect_class";
 import SpriteMovePreEffect from "../src/classes/effects/post/sprite_move_post_effect_class";

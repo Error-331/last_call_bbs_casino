@@ -1,4 +1,4 @@
-import Drawable from './../../core/drawable_class';
+import Drawable from '../../drawable/drawable_class';
 import { defaultTo } from './../../../utils/common_utils';
 
 class BaseSlotMachine extends Drawable {

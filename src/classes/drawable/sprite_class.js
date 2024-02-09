@@ -1,5 +1,5 @@
 import Drawable from './drawable_class';
-import DrawInstruction from './draw_instruction_class';
+import DrawCall from './../draw_calls/draw_call_class';
 
 import { PRE_SPRITE_EFFECT, POST_SPRITE_EFFECT } from './../../constants/sprite_effect_constants';
 
@@ -9,8 +9,6 @@ import { isNullOrEmpty } from './../../utils/common_utils';
 class Sprite extends Drawable {
     #spriteData = [];
     #colorMap = [];
-
-    #drawInstructions = [];
 
     #width = 0;
     #height = 0;
@@ -35,7 +33,7 @@ class Sprite extends Drawable {
 
         this.#effects = effects;
 
-        this.prepareDrawInstructions();
+        this.prepareDrawCalls();
     }
 
     #applyEffects(effectType, drawInstruction) {
@@ -58,16 +56,16 @@ class Sprite extends Drawable {
                 continue;
             }
 
-            this.#drawInstructions = effect.applyOnSet(this, this.#drawInstructions);
+            this.addDrawCalls(effect.applyOnSet(this, this.drawCalls));
         }
     }
 
-    #applyPreEffects(drawInstruction) {
-        return this.#applyEffects(PRE_SPRITE_EFFECT, drawInstruction);
+    #applyPreEffects(drawCall) {
+        return this.#applyEffects(PRE_SPRITE_EFFECT, drawCall);
     }
 
-    #applyPostEffects(drawInstruction) {
-        return this.#applyEffects(POST_SPRITE_EFFECT, drawInstruction);
+    #applyPostEffects(drawCall) {
+        return this.#applyEffects(POST_SPRITE_EFFECT, drawCall);
     }
 
     #applyPostEffectsOnSet() {
@@ -79,7 +77,7 @@ class Sprite extends Drawable {
         this.#height = this.#spriteData.length;
     }
 
-    prepareDrawInstructions() {
+    prepareDrawCalls() {
         const spriteData = this.#spriteData;
         const colorData = this.#colorMap;
 
@@ -88,36 +86,36 @@ class Sprite extends Drawable {
         let currentX = this.currentX;
         let currentY = this.currentY;
 
-        this.#drawInstructions = [];
+        this.clearDrawCalls();
 
         for (let rowIdx = 0; rowIdx < this.#spriteData.length; rowIdx++) {
-            let drawInstruction = new DrawInstruction(spriteData[rowIdx], colorData[rowIdx], currentX, currentY);
-            drawInstruction = this.#applyPreEffects(drawInstruction);
+            let drawCall = new DrawCall(spriteData[rowIdx], colorData[rowIdx], currentX, currentY);
+            drawCall = this.#applyPreEffects(drawCall);
 
-            if (isNullOrEmpty(drawInstruction)) {
+            if (isNullOrEmpty(drawCall)) {
                 currentX = x;
                 currentY += 1;
 
                 continue;
             }
 
-            currentX = drawInstruction.x;
-            currentY = drawInstruction.y;
+            currentX = drawCall.x;
+            currentY = drawCall.y;
 
-            let colorBuffer = isNullOrEmpty(drawInstruction.colorBuffer[0]) ? 0 : drawInstruction.colorBuffer[0];
+            let colorBuffer = isNullOrEmpty(drawCall.colorBuffer[0]) ? 0 : drawCall.colorBuffer[0];
 
             let strPos = 0;
             let symbolIdx = 0;
 
-            for (symbolIdx = 0; symbolIdx < drawInstruction.data.length; symbolIdx++) {
-                const currentColor = isNullOrEmpty(drawInstruction.colorBuffer[symbolIdx]) ? 0 : drawInstruction.colorBuffer[symbolIdx];
+            for (symbolIdx = 0; symbolIdx < drawCall.data.length; symbolIdx++) {
+                const currentColor = isNullOrEmpty(drawCall.colorBuffer[symbolIdx]) ? 0 : drawCall.colorBuffer[symbolIdx];
 
                 if (currentColor !== colorBuffer) {
-                    const strToDraw = drawInstruction.data.slice(strPos, symbolIdx);
-                    const postDrawInstructions = this.#applyPostEffects(new DrawInstruction(strToDraw, colorBuffer, currentX, currentY));
+                    const strToDraw = drawCall.data.slice(strPos, symbolIdx);
+                    const postDrawInstructions = this.#applyPostEffects(new DrawCall(strToDraw, colorBuffer, currentX, currentY));
 
                     if (!isNullOrEmpty(postDrawInstructions)) {
-                        this.#drawInstructions.push(postDrawInstructions);
+                        this.addDrawCall(postDrawInstructions);
                     }
 
                     currentX += strToDraw.length;
@@ -127,10 +125,10 @@ class Sprite extends Drawable {
                 }
             }
 
-            const postDrawInstructions = this.#applyPostEffects(new DrawInstruction(drawInstruction.data.slice(strPos, symbolIdx), colorBuffer, currentX, currentY));
+            const postDrawInstructions = this.#applyPostEffects(new DrawCall(drawCall.data.slice(strPos, symbolIdx), colorBuffer, currentX, currentY));
 
             if (!isNullOrEmpty(postDrawInstructions)) {
-                this.#drawInstructions.push(postDrawInstructions);
+                this.addDrawCall(postDrawInstructions);
             }
 
             currentX = x;
@@ -138,12 +136,7 @@ class Sprite extends Drawable {
         }
 
         this.#applyPostEffectsOnSet();
-    }
-
-    draw() {
-        for (const drawInstructionRow of this.#drawInstructions) {
-            drawInstructionRow.draw();
-        }
+        super.prepareDrawCalls();
     }
 
     get spriteData() {
@@ -154,20 +147,16 @@ class Sprite extends Drawable {
         return this.#colorMap;
     }
 
-    get drawInstructions() {
-        return this.#drawInstructions;
-    }
-
     set spriteData(spriteData) {
         this.#spriteData = spriteData;
 
         this.updateDimensions();
-        this.prepareDrawInstructions();
+        this.prepareDrawCalls();
     }
 
     set colorMap(colorMap) {
         this.#colorMap = colorMap;
-        this.prepareDrawInstructions();
+        this.prepareDrawCalls();
     }
 }
 

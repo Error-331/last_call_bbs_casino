@@ -1,4 +1,4 @@
-import Sprite from './sprite_class';
+import Sprite from '../drawable/sprite_class';
 import { isNullOrEmpty } from './../../utils/common_utils';
 
 const SPRITE_DRAWABLE_TYPE = 'SPRITE_DRAWABLE_TYPE';
